@@ -56,14 +56,44 @@
 
     <script>
         function generateVouchers() {
-            var numVouchers = document.getElementById('numVouchers').value;
+            var numVouchers = parseInt(document.getElementById('numVouchers').value);
             var prefix = document.getElementById('prefix').value;
-            var length = document.getElementById('length').value;
+            var length = parseInt(document.getElementById('length').value);
+            var vouchers = [];
 
-            // Placeholder for voucher generation logic
-            console.log(`Generating ${numVouchers} vouchers with prefix '${prefix}' and length ${length}`);
-            
-            // You will need to add the actual voucher generation and CSV creation logic here
+            for (var i = 0; i < numVouchers; i++) {
+                var voucher = prefix + generateRandomString(length - prefix.length);
+                vouchers.push(voucher);
+            }
+
+            downloadCSV(vouchers);
+        }
+
+        function generateRandomString(length) {
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var randomString = '';
+
+            for (var i = 0; i < length; i++) {
+                var randomIndex = Math.floor(Math.random() * characters.length);
+                randomString += characters[randomIndex];
+            }
+
+            return randomString;
+        }
+
+        function downloadCSV(vouchers) {
+            var csvContent = "data:text/csv;charset=utf-8,";
+            vouchers.forEach(function(voucher) {
+                csvContent += voucher + "\r\n"; // add each voucher on a new line
+            });
+
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "vouchers.csv");
+            document.body.appendChild(link); // Required for FF
+
+            link.click(); // This will download the file
         }
     </script>
 </body>
