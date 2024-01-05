@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Age Calculator</title>
+    <!-- Add any styles or scripts specific to the age calculator here -->
+</head>
+<body>
+    <h2>Age Calculator</h2>
+
+    <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate">
+    </div>
+
+    <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate">
+    </div>
+
+    <button onclick="calculateAge()">Calculate Age</button>
+
+    <p id="ageResult"></p>
+
+    <script>
+        function calculateAge() {
+            var startDate = new Date(document.getElementById('startDate').value);
+            var endDate = new Date(document.getElementById('endDate').value);
+
+            var ageInMilliseconds = endDate - startDate;
+            var ageInSeconds = ageInMilliseconds / 1000;
+            var ageInMinutes = ageInSeconds / 60;
+            var ageInHours = ageInMinutes / 60;
+            var ageInDays = ageInHours / 24;
+            var ageInMonths = ageInDays / 30.4375; // Approximate months in a year
+            var ageInYears = ageInMonths / 12;
+
+            // Extract whole years, months, and days
+            var years = Math.floor(ageInYears);
+            var months = Math.floor((ageInYears - years) * 12);
+            var days = Math.floor((ageInDays - (years * 365) - (months * 30.4375)));
+
+            document.getElementById('ageResult').innerText = "The age is " + years + " years, " + months + " months, and " + days + " days.";
+        }
+    </script>
+</body>
+</html>
