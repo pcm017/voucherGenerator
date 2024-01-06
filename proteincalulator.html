@@ -63,8 +63,6 @@
     <script>
         // JavaScript code for the protein calculator
 
-// JavaScript code for the protein calculator
-
 // Function to add a new row with sliders
 function addFoodRow() {
     const foodList = document.getElementById('food-list');
@@ -72,6 +70,10 @@ function addFoodRow() {
     newRow.classList.add('row', 'mt-3');
 
     newRow.innerHTML = `
+        <div class="col-md-4">
+            <label for="food">Food:</label>
+            <input type="text" class="form-control" name="food" placeholder="Search for food" required>
+        </div>
         <div class="col-md-4">
             <label for="unit">Unit:</label>
             <select class="form-control" name="unit">
@@ -83,13 +85,29 @@ function addFoodRow() {
             <label for="slider">Quantity:</label>
             <input type="range" class="form-control-range" name="slider" min="0" max="20" value="0">
         </div>
-        <div class="col-md-4">
-            <label for="food">Food:</label>
-            <input type="text" class="form-control" name="food" placeholder="Search for food" required>
-        </div>
     `;
 
-    foodList.appendChild(newRow);
+    // Add mock food items with protein content
+    if (foodList.children.length === 0) {
+        newRow.querySelector('input[name="food"]').value = "Food Item 1";
+        newRow.querySelector('select[name="unit"]').value = "counts"; // You can set the default unit here
+        newRow.querySelector('input[name="slider"]').min = 1;
+        newRow.querySelector('input[name="slider"]').max = 100;
+        newRow.querySelector('input[name="slider"]').step = 1;
+
+        // Create another row for the second food item
+        const newRow2 = newRow.cloneNode(true);
+        newRow2.querySelector('input[name="food"]').value = "Food Item 2";
+        newRow2.querySelector('input[name="slider"]').min = 1;
+        newRow2.querySelector('input[name="slider"]').max = 100;
+        newRow2.querySelector('input[name="slider"]').step = 1;
+
+        // Append both rows to the food list
+        foodList.appendChild(newRow);
+        foodList.appendChild(newRow2);
+    } else {
+        foodList.appendChild(newRow);
+    }
 }
 
 // Event listener for "Add Food" button
@@ -109,7 +127,7 @@ document.addEventListener('input', function (e) {
 // Event listener for unit changes
 document.addEventListener('change', function (e) {
     if (e.target.name === 'unit') {
-        const slider = e.target.parentElement.nextElementSibling.querySelector('input[type="range"]');
+        const slider = e.target.parentElement.nextElementSibling.nextElementSibling.querySelector('input[type="range"]');
         const sliderValue = e.target.value === 'counts' ? 1 : 0;
         slider.min = sliderValue;
         slider.max = e.target.value === 'counts' ? 100 : 1000;
@@ -119,6 +137,7 @@ document.addEventListener('change', function (e) {
         totalElement.textContent = `Total: ${sliderValue}`;
     }
 });
+
 
 
     </script>
