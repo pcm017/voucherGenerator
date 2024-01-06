@@ -4,42 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protein Calculator</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Add your custom styles here */
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.btn-success {
-    background-color: #28a745;
-    color: #fff;
-}
-
-.row {
-    margin-top: 10px;
-}
-
-/* Additional styling can be added as needed */
-
-    </style>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Protein Calculator</h1>
-        <p>Calculate your daily protein intake based on food items.</p>
+    <div class="container mt-5">
+        <h1 class="text-center">Protein Calculator</h1>
+        <p class="text-center">Calculate your daily protein intake based on food items.</p>
 
         <form id="protein-form">
             <div id="food-list">
                 <!-- Food items will be added dynamically -->
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <label for="unit">Unit:</label>
+                    <select class="form-control" id="unit" name="unit">
+                        <option value="counts">Counts</option>
+                        <option value="grams">Grams</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="slider">Quantity:</label>
+                    <input type="range" class="form-control-range" id="slider" name="slider">
+                </div>
+                <div class="col-md-4">
+                    <label for="food">Food:</label>
+                    <input type="text" class="form-control" id="food" name="food" placeholder="Search for food" required>
+                </div>
             </div>
 
             <div class="row mt-3">
@@ -60,6 +53,12 @@
         </form>
     </div>
 
+    <!-- Include Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript for adding food items -->
     <script src="script.js"></script>
     <script>
         // JavaScript code for the protein calculator
@@ -71,18 +70,20 @@ function addFoodRow() {
     newRow.classList.add('row', 'mt-3');
 
     newRow.innerHTML = `
-        <div class="col-md-6">
-            <label for="food">Food:</label>
-            <select class="form-control" name="food" required>
-                <option value="food1">Food 1</option>
-                <option value="food2">Food 2</option>
-                <!-- Add more food options here -->
+        <div class="col-md-4">
+            <label for="unit">Unit:</label>
+            <select class="form-control" name="unit">
+                <option value="counts">Counts</option>
+                <option value="grams">Grams</option>
             </select>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label for="slider">Quantity:</label>
-            <input type="range" class="form-control-range" name="slider" min="0" max="100" value="0">
-            <div class="mt-2"><span class="badge badge-info">Total: 0</span></div>
+            <input type="range" class="form-control-range" name="slider" min="0" max="20" value="0">
+        </div>
+        <div class="col-md-4">
+            <label for="food">Food:</label>
+            <input type="text" class="form-control" name="food" placeholder="Search for food" required>
         </div>
     `;
 
@@ -98,7 +99,7 @@ document.getElementById('add-food').addEventListener('click', function () {
 document.addEventListener('input', function (e) {
     if (e.target.type === 'range') {
         const sliderValue = e.target.value;
-        const totalElement = e.target.nextElementSibling.querySelector('.badge');
+        const totalElement = e.target.parentElement.nextElementSibling.querySelector('.badge');
         totalElement.textContent = `Total: ${sliderValue}`;
     }
 });
@@ -106,16 +107,16 @@ document.addEventListener('input', function (e) {
 // Event listener for form submission
 document.getElementById('protein-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    
+
     // Calculate total protein based on selected food items and their quantities
     // Display the total protein in the total-protein div
     const sliders = document.querySelectorAll('input[type="range"]');
     let totalProtein = 0;
-    
+
     sliders.forEach(function (slider) {
         totalProtein += parseFloat(slider.value);
     });
-    
+
     const totalProteinElement = document.getElementById('total-protein');
     totalProteinElement.innerHTML = `<h3>Total Protein: ${totalProtein}</h3>`;
 });
