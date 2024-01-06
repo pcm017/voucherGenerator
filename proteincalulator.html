@@ -38,6 +38,13 @@
         button:hover {
             background-color: #0056b3;
         }
+        #items-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -61,7 +68,9 @@
             <input type="range" id="quantity" min="0" max="1000" step="50" value="0">
             <span id="quantity-display">0g</span>
         </div>
-        <button id="calculate">Calculate Protein</button>
+        <button id="add">Add</button>
+        <button id="calculate">Calculate Total Protein</button>
+        <div id="items-list"></div>
         <div id="result"></div>
     </div>
     <script>
@@ -77,6 +86,7 @@
                 const unit = getSelectedUnit();
                 quantityDisplay.textContent = unit === 'grams' ? `${quantitySlider.value}g` : `${quantitySlider.value}`;
             });
+            document.getElementById('add').addEventListener('click', addItem);
 
             document.getElementById('calculate').addEventListener('click', calculateProtein);
 
@@ -98,13 +108,31 @@
         function getSelectedUnit() {
             return document.querySelector('input[name="unit"]:checked').value;
         }
-
-        function calculateProtein() {
+        function addItem() {
             const selectedFood = document.getElementById('food-selector').querySelector('select').value;
             const quantity = parseInt(document.getElementById('quantity').value, 10);
             const unit = getSelectedUnit();
-            const proteinContent = unit === 'grams' ? foods[selectedFood].proteinPer50g * (quantity / 50) : foods[selectedFood].proteinPerUnit * quantity;
-            document.getElementById('result').textContent = `Total Protein: ${proteinContent.toFixed(2)} grams`;
+            items.push({ food: selectedFood, quantity: quantity, unit: unit });
+            displayItems();
+        }
+        function displayItems() {
+            const list = document.getElementById('items-list');
+            list.innerHTML = '';
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.textContent = `${item.food.charAt(0).toUpperCase() + item.food.slice(1)}: ${item.quantity} ${item.unit}`;
+                list.appendChild(div);
+            });
+        }
+       function calculateProtein() {
+            let totalProtein = 0;
+            items.forEach(item => {
+                const proteinContent = item.unit === 'grams' ? foods[item.food].proteinPer50g * (item.quantity / 50) : foods[item.food].proteinPerUnit * item.quantity;
+                totalProtein += proteinContent;
+            });
+            document.getElementById('result').textContent = `Total Protein: ${totalProtein.toFixed(2)} grams`;
+            items = []; // Reset items
         }
     </script>
 </body>
