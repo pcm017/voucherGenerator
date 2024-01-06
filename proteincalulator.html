@@ -4,56 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protein Calculator</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-}
-
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-#food-selector, #quantity {
-    margin-bottom: 20px;
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        #food-selector, #quantity-slider {
+            margin-bottom: 20px;
+        }
+        #unit-selector label {
+            margin-right: 15px;
+        }
+        #unit-selector input {
+            margin-right: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Protein Calculator</h1>
         <div id="food-selector">
-            <!-- Food items will be populated here -->
+            <select>
+                <option value="egg">Egg</option>
+                <option value="chicken">Chicken</option>
+            </select>
         </div>
-        <input type="number" id="quantity" placeholder="Enter quantity">
+        <div id="unit-selector">
+            <label>
+                <input type="radio" name="unit" value="grams" checked> Grams
+            </label>
+            <label>
+                <input type="radio" name="unit" value="count"> Count
+            </label>
+        </div>
+        <div id="quantity-slider">
+            <input type="range" id="quantity" min="0" max="1000" step="50" value="0">
+            <span id="quantity-display">0g</span>
+        </div>
         <button id="calculate">Calculate Protein</button>
         <div id="result"></div>
     </div>
-    <script src="script.js"></script>
+    <script>
+        const foods = {
+            egg: { proteinPerUnit: 6, proteinPer50g: 6.5 },
+            chicken: { proteinPerUnit: 31, proteinPer50g: 16 }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const quantitySlider = document.getElementById('quantity');
+            const quantityDisplay = document.getElementById('quantity-display');
+            quantitySlider.addEventListener('input', () => {
+                const unit = getSelectedUnit();
+                quantityDisplay.textContent = unit === 'grams' ? `${quantitySlider.value}g` : `${quantitySlider.value}`;
+            });
+
+            document.getElementById('calculate').addEventListener('click', calculateProtein);
+
+            document.querySelectorAll('input[name="unit"]').forEach(input => {
+                input.addEventListener('change', () => {
+                    if (input.value === 'grams') {
+                        quantitySlider.max = 1000;
+                        quantitySlider.step = 50;
+                    } else {
+                        quantitySlider.max = 20;
+                        quantitySlider.step = 1;
+                    }
+                    quantitySlider.value = 0;
+                    quantityDisplay.textContent = '0';
+                });
+            });
+        });
+
+        function getSelectedUnit() {
+            return document.querySelector('input[name="unit"]:checked').value;
+        }
+
+        function calculateProtein() {
+            const selectedFood = document.getElementById('food-selector').querySelector('select').value;
+            const quantity = parseInt(document.getElementById('quantity').value, 10);
+            const unit = getSelectedUnit();
+            const proteinContent = unit === 'grams' ? foods[selectedFood].proteinPer50g * (quantity / 50) : foods[selectedFood].proteinPerUnit * quantity;
+            document.getElementById('result').textContent = `Total Protein: ${proteinContent.toFixed(2)} grams`;
+        }
+    </script>
 </body>
 </html>
