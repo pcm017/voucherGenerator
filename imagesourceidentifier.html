@@ -30,13 +30,15 @@
 
     <script>
         function uploadFromCamera() {
-            document.getElementById('fileInput').setAttribute('capture', 'camera');
-            document.getElementById('fileInput').click();
+            var input = document.getElementById('fileInput');
+            input.setAttribute('capture', 'environment'); // Suggest using the rear-facing camera
+            input.click();
         }
 
         function uploadFromGallery() {
-            document.getElementById('fileInput').removeAttribute('capture');
-            document.getElementById('fileInput').click();
+            var input = document.getElementById('fileInput');
+            input.removeAttribute('capture'); // Normal file selection
+            input.click();
         }
 
         function fileSelected(event) {
