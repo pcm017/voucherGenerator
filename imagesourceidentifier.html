@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload Source Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #fileInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Select Image Source</h2>
+    <button class="button" onclick="uploadFromCamera()">Upload from Camera</button>
+    <button class="button" onclick="uploadFromGallery()">Upload from Gallery</button>
+
+    <input type="file" id="fileInput" accept="image/*" onchange="fileSelected(event)">
+
+    <script>
+        function uploadFromCamera() {
+            document.getElementById('fileInput').setAttribute('capture', 'camera');
+            document.getElementById('fileInput').click();
+        }
+
+        function uploadFromGallery() {
+            document.getElementById('fileInput').removeAttribute('capture');
+            document.getElementById('fileInput').click();
+        }
+
+        function fileSelected(event) {
+            var file = event.target.files[0];
+            if (!file) {
+                return;
+            }
+            var source = event.target.getAttribute('capture') ? 'Camera' : 'Gallery';
+            alert('Image uploaded from: ' + source);
+            // Here, you can handle the file further as per your requirement.
+        }
+    </script>
+</body>
+</html>
