@@ -51,15 +51,41 @@
             font-weight: bold;
         }
 
-        .cloud {
-    width: 100px;
-    height: 60px;
-    background-color: #fff; /* White color for the cloud */
-    border-radius: 50px; /* Make it round */
-    position: absolute;
-    animation: cloudAnimation 10s linear infinite;
-}
+  .cloud {
+            width: 200px;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 100px;
+             position: absolute;
+            animation: moveCloud 10s linear infinite
+        }
+        
+        .cloud::before, .cloud::after {
+            content: '';
+            width: 80px;
+            height: 80px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .cloud::before {
+            top: 20px;
+            left: 40px;
+        }
+        
+        .cloud::after {
+            top: 40px;
+            left: 80px;
 
+@keyframes moveCloud {
+            0% {
+                left: -200px;
+            }
+            100% {
+                left: 100%;
+            }}
+            
 @keyframes cloudAnimation {
     0% {
         left: -100px; /* Move the cloud off-screen to the left */
@@ -72,13 +98,14 @@
     </style>
 </head>
 <body>
+    <div class="cloud"></div>
+
     <h1><p id="tomorrow-date">Loading...</p></h1>
 </b>
     <h1>Tomorrow's Weather is: <p id="weather">Loading...</p> </b>
     for <p id="city">Loading...</p></h1>
     
     <button id="detect-weather">Detect Weather</button>
-<div class="cloud"></div>
 
    <!-- <p id="city">City: Loading...</p> -->
     
