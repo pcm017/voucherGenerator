@@ -86,23 +86,40 @@ document.addEventListener('input', function (e) {
     }
 });
 
-// Event listener for Calculate EMI button
-document.getElementById('calculate-emi').addEventListener('click', function () {
-    const emiResult = calculateEMI();
-    const emiResultElement = document.getElementById('emi-result');
-    emiResultElement.innerHTML = `
-        <h3>EMI: ₹${emiResult.emi} per month</h3>
-        <p>Total Loan Amount: ₹${emiResult.totalLoanAmount}</p>
-        <p>Disbursal Amount: ₹${emiResult.disbursalAmount}</p>
-        <p><a href="#" id="download-amortization">Download Amortization Schedule</a></p>
-    `;
+// Check if the WebHaptic API is supported by the browser
+if ('vibrate' in navigator) {
+    // Define a pattern for haptic feedback (e.g., vibrate for 100ms)
+    const hapticPattern = [100];
 
-    // Event listener for Download Amortization Schedule link
-    document.getElementById('download-amortization').addEventListener('click', function () {
-        // Generate and download the amortization schedule (as shown in previous code)
-        alert('Amortization schedule download functionality to be implemented.');
+    // Function to trigger haptic feedback
+    function triggerHapticFeedback() {
+        navigator.vibrate(hapticPattern);
+    }
+
+    // Event listener for Calculate EMI button
+    document.getElementById('calculate-emi').addEventListener('click', function () {
+        const emiResult = calculateEMI();
+        const emiResultElement = document.getElementById('emi-result');
+        emiResultElement.innerHTML = `
+            <h3>EMI: ₹${emiResult.emi} per month</h3>
+            <p>Total Loan Amount: ₹${emiResult.totalLoanAmount}</p>
+            <p>Disbursal Amount: ₹${emiResult.disbursalAmount}</p>
+            <p><a href="#" id="download-amortization">Download Amortization Schedule</a></p>
+        `;
+
+        // Trigger haptic feedback when the button is clicked
+        triggerHapticFeedback();
+
+        // Event listener for Download Amortization Schedule link
+        document.getElementById('download-amortization').addEventListener('click', function () {
+            // Generate and download the amortization schedule (as shown in previous code)
+            alert('Amortization schedule download functionality to be implemented.');
+        });
     });
-});
+} else {
+    console.log('WebHaptic API is not supported in this browser.');
+}
+
 
 // Initialize slider values when the page loads
 window.addEventListener('load', function () {
