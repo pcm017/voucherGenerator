@@ -25,6 +25,7 @@ function getCity() {
                 .then((data) => {
                     const city = data.name;
                     document.getElementById('city').textContent = city;
+                    console.log('Detected City:', city);
                     getTomorrowWeather(city);
                 })
                 .catch((error) => {
@@ -52,6 +53,7 @@ function getTomorrowWeather(city) {
                 if (dateTime.getTime() === tomorrow.getTime()) {
                     const weatherDescription = weather.weather[0].description;
                     document.getElementById('weather').textContent = weatherDescription;
+                    console.log('Tomorrow\'s Weather:', weatherDescription);
                     break;
                 }
             }
@@ -66,8 +68,6 @@ document.getElementById('detect-weather').addEventListener('click', getCity);
 
 // Automatically detect weather when the page loads
 window.addEventListener('load', getCity);
-
-    
   </script>
 </body>
 </html>
