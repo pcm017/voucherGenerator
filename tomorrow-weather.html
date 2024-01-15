@@ -9,8 +9,8 @@
     <p>Weather for Tomorrow: <span id="weather"></span></p>
 <p>Tomorrow's Date 📅: <span id="tomorrow-date"></span></p>
 
-    <p>Sunrise 🌅: <span id="sunrise"></span></p>
-<p>Sunset 🌇: <span id="sunset"></span></p>
+    <p><span id="sunrise"></span></p>
+<p><span id="sunset"></span></p>
 <p>Temperature 🌡️: <span id="temperature"></span></p>
 
     <button id="detect-weather">Detect Weather</button>
@@ -84,11 +84,14 @@ function displaySunriseSunset(sunriseTimestamp, sunsetTimestamp) {
 
 // Function to calculate tomorrow's date and display temperature
 function displayTomorrowDateTemperature(data) {
+    
     const tomorrowDate = new Date();
+    console.log('Tomorrows Date',tomorrowDate);
     tomorrowDate.setDate(tomorrowDate.getDate() + 1);
     const tomorrowFormatted = tomorrowDate.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
     const tomorrowTemperature = data.list[0].main.temp;
+    console.log('Tomorrows Temperature',tomorrowTemperature);
     document.getElementById('tomorrow-date').textContent = `Tomorrow's Date 📅: ${tomorrowFormatted}`;
     document.getElementById('temperature').textContent = `Temperature 🌡️: ${tomorrowTemperature}°C`;
 }
