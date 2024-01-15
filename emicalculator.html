@@ -46,18 +46,38 @@
         // JavaScript code for the EMI calculator
 
 // Function to calculate EMI
+// Function to initialize slider values
+function initializeSliders() {
+    const sliders = document.querySelectorAll('input[type="range"]');
+    sliders.forEach((slider) => {
+        const initialValue = parseFloat(slider.value);
+        const badge = slider.nextElementSibling;
+        badge.textContent = initialValue;
+    });
+}
+
+// Function to calculate EMI
 function calculateEMI() {
     const loanAmount = parseFloat(document.getElementById('loan-amount').value);
     const tenure = parseFloat(document.getElementById('tenure').value);
-    const interestRate = parseFloat(document.getElementById('interest-rate').value);
+    const interestRate = parseFloat(document.getElementById('interest-rate').value) / 100;
+    const processingFeePercentage = parseFloat(document.getElementById('processing-fee').value) / 100;
+    const preEMIPeriod = parseFloat(document.getElementById('pre-emi-period').value);
 
-    const monthlyInterestRate = (interestRate / 12) / 100;
+    const monthlyInterestRate = (interestRate / 12);
     const emi = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -tenure));
     
-    return emi.toFixed(2);
+    const totalLoanAmount = loanAmount + (loanAmount * processingFeePercentage);
+    const disbursalAmount = totalLoanAmount - (emi * preEMIPeriod);
+
+    return {
+        emi: emi.toFixed(2),
+        totalLoanAmount: totalLoanAmount.toFixed(2),
+        disbursalAmount: disbursalAmount.toFixed(2)
+    };
 }
 
-// Event listener for slider changes
+// Event listener for slider changes (for processing fee and pre-EMI period)
 document.addEventListener('input', function (e) {
     if (e.target.type === 'range') {
         const sliderValue = e.target.value;
@@ -68,20 +88,25 @@ document.addEventListener('input', function (e) {
 
 // Event listener for Calculate EMI button
 document.getElementById('calculate-emi').addEventListener('click', function () {
-    const emi = calculateEMI();
+    const emiResult = calculateEMI();
     const emiResultElement = document.getElementById('emi-result');
     emiResultElement.innerHTML = `
-        <h3>EMI: ₹${emi} per month</h3>
+        <h3>EMI: ₹${emiResult.emi} per month</h3>
+        <p>Total Loan Amount: ₹${emiResult.totalLoanAmount}</p>
+        <p>Disbursal Amount: ₹${emiResult.disbursalAmount}</p>
         <p><a href="#" id="download-amortization">Download Amortization Schedule</a></p>
     `;
 
     // Event listener for Download Amortization Schedule link
     document.getElementById('download-amortization').addEventListener('click', function () {
-        // Code to generate and download the amortization schedule in Excel format
-        // You can use a library like xlsx.js for this purpose
-        // Example code: https://github.com/SheetJS/sheetjs#browserify
+        // Generate and download the amortization schedule (as shown in previous code)
         alert('Amortization schedule download functionality to be implemented.');
     });
+});
+
+// Initialize slider values when the page loads
+window.addEventListener('load', function () {
+    initializeSliders();
 });
 
     </script>
