@@ -170,6 +170,7 @@
 // Convert temperature from Kelvin to Celsius
     const tomorrowTemperatureKelvin = data.list[0].main.temp;
     const tomorrowTemperatureCelsius = (tomorrowTemperatureKelvin - 273.15).toFixed(2);
+            const weatherDescription = data.list[0].weather[0].description;
             console.log(tomorrowDate);
             console.log(data.list[0]);
 
