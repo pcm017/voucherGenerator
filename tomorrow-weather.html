@@ -7,6 +7,12 @@
     <h1>Tomorrow's Weather</h1>
     <p>City: <span id="city"></span></p>
     <p>Weather for Tomorrow: <span id="weather"></span></p>
+<p>Tomorrow's Date 📅: <span id="tomorrow-date"></span></p>
+
+    <p>Sunrise 🌅: <span id="sunrise"></span></p>
+<p>Sunset 🌇: <span id="sunset"></span></p>
+<p>Temperature 🌡️: <span id="temperature"></span></p>
+
     <button id="detect-weather">Detect Weather</button>
 
     <!-- Include JavaScript code here -->
@@ -20,7 +26,6 @@ function getCity() {
         navigator.geolocation.getCurrentPosition((position) => {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-            console.log(latitude);
             fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
                 .then((response) => response.json())
                 .then((data) => {
@@ -28,6 +33,7 @@ function getCity() {
                     document.getElementById('city').textContent = city;
                     console.log('Detected City:', city);
                     getTomorrowWeather(city);
+                    displaySunriseSunset(data.sys.sunrise, data.sys.sunset);
                 })
                 .catch((error) => {
                     console.error('Error fetching city:', error);
@@ -47,7 +53,7 @@ function getTomorrowWeather(city) {
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(0, 0, 0, 0);
-            console.log(data);
+
             const weatherList = data.list;
             for (const weather of weatherList) {
                 const dateTime = new Date(weather.dt * 1000);
@@ -62,6 +68,29 @@ function getTomorrowWeather(city) {
         .catch((error) => {
             console.error('Error fetching weather:', error);
         });
+}
+
+// Function to display sunrise and sunset times with emoji icons
+function displaySunriseSunset(sunriseTimestamp, sunsetTimestamp) {
+    const sunriseTime = new Date(sunriseTimestamp * 1000);
+    const sunsetTime = new Date(sunsetTimestamp * 1000);
+
+    const sunriseFormatted = sunriseTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const sunsetFormatted = sunsetTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    document.getElementById('sunrise').textContent = `Sunrise 🌅: ${sunriseFormatted}`;
+    document.getElementById('sunset').textContent = `Sunset 🌇: ${sunsetFormatted}`;
+}
+
+// Function to calculate tomorrow's date and display temperature
+function displayTomorrowDateTemperature(data) {
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const tomorrowFormatted = tomorrowDate.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+    const tomorrowTemperature = data.list[0].main.temp;
+    document.getElementById('tomorrow-date').textContent = `Tomorrow's Date 📅: ${tomorrowFormatted}`;
+    document.getElementById('temperature').textContent = `Temperature 🌡️: ${tomorrowTemperature}°C`;
 }
 
 // Event listener for the "Detect Weather" button
