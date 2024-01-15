@@ -61,19 +61,19 @@ function calculateEMI() {
     const loanAmount = parseFloat(document.getElementById('loan-amount').value);
     const tenure = parseFloat(document.getElementById('tenure').value);
     const interestRate = parseFloat(document.getElementById('interest-rate').value) / 100;
-    const processingFeePercentage = parseFloat(document.getElementById('processing-fee').value) / 100;
-    const preEMIPeriod = parseFloat(document.getElementById('pre-emi-period').value);
+  //  const processingFeePercentage = parseFloat(document.getElementById('processing-fee').value) / 100;
+  //  const preEMIPeriod = parseFloat(document.getElementById('pre-emi-period').value);
 
     const monthlyInterestRate = (interestRate / 12);
     const emi = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -tenure));
     
-    const totalLoanAmount = loanAmount + (loanAmount * processingFeePercentage);
-    const disbursalAmount = totalLoanAmount - (emi * preEMIPeriod);
+    //const totalLoanAmount = loanAmount + (loanAmount * processingFeePercentage);
+   // const disbursalAmount = totalLoanAmount - (emi * preEMIPeriod);
 
     return {
         emi: emi.toFixed(2),
-        totalLoanAmount: totalLoanAmount.toFixed(2),
-        disbursalAmount: disbursalAmount.toFixed(2)
+     //   totalLoanAmount: totalLoanAmount.toFixed(2),
+       // disbursalAmount: disbursalAmount.toFixed(2)
     };
 }
 
