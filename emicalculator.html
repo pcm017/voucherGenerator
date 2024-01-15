@@ -42,6 +42,48 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Custom JavaScript for EMI calculation -->
-    <script src="emi-calculator.js"></script>
+    <script>
+        // JavaScript code for the EMI calculator
+
+// Function to calculate EMI
+function calculateEMI() {
+    const loanAmount = parseFloat(document.getElementById('loan-amount').value);
+    const tenure = parseFloat(document.getElementById('tenure').value);
+    const interestRate = parseFloat(document.getElementById('interest-rate').value);
+
+    const monthlyInterestRate = (interestRate / 12) / 100;
+    const emi = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -tenure));
+    
+    return emi.toFixed(2);
+}
+
+// Event listener for slider changes
+document.addEventListener('input', function (e) {
+    if (e.target.type === 'range') {
+        const sliderValue = e.target.value;
+        const badge = e.target.nextElementSibling;
+        badge.textContent = sliderValue;
+    }
+});
+
+// Event listener for Calculate EMI button
+document.getElementById('calculate-emi').addEventListener('click', function () {
+    const emi = calculateEMI();
+    const emiResultElement = document.getElementById('emi-result');
+    emiResultElement.innerHTML = `
+        <h3>EMI: ₹${emi} per month</h3>
+        <p><a href="#" id="download-amortization">Download Amortization Schedule</a></p>
+    `;
+
+    // Event listener for Download Amortization Schedule link
+    document.getElementById('download-amortization').addEventListener('click', function () {
+        // Code to generate and download the amortization schedule in Excel format
+        // You can use a library like xlsx.js for this purpose
+        // Example code: https://github.com/SheetJS/sheetjs#browserify
+        alert('Amortization schedule download functionality to be implemented.');
+    });
+});
+
+    </script>
 </body>
 </html>
