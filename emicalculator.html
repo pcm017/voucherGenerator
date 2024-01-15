@@ -43,10 +43,7 @@
 
     <!-- Custom JavaScript for EMI calculation -->
     <script>
-        // JavaScript code for the EMI calculator
-
-// Function to calculate EMI
-// Function to initialize slider values
+        // Function to initialize slider values
 function initializeSliders() {
     const sliders = document.querySelectorAll('input[type="range"]');
     sliders.forEach((slider) => {
@@ -61,20 +58,40 @@ function calculateEMI() {
     const loanAmount = parseFloat(document.getElementById('loan-amount').value);
     const tenure = parseFloat(document.getElementById('tenure').value);
     const interestRate = parseFloat(document.getElementById('interest-rate').value) / 100;
-  //  const processingFeePercentage = parseFloat(document.getElementById('processing-fee').value) / 100;
-  //  const preEMIPeriod = parseFloat(document.getElementById('pre-emi-period').value);
+   // const processingFeePercentage = parseFloat(document.getElementById('processing-fee').value) / 100;
+   // const preEMIPeriod = parseFloat(document.getElementById('pre-emi-period').value);
 
     const monthlyInterestRate = (interestRate / 12);
     const emi = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -tenure));
-    
-    //const totalLoanAmount = loanAmount + (loanAmount * processingFeePercentage);
-   // const disbursalAmount = totalLoanAmount - (emi * preEMIPeriod);
+
+    console.log('Loan Amount:', loanAmount);
+    console.log('Tenure:', tenure);
+    console.log('Interest Rate:', interestRate);
+    console.log('Processing Fee Percentage:', processingFeePercentage);
+    console.log('Pre-EMI Period:', preEMIPeriod);
+
+//    const totalLoanAmount = loanAmount + (loanAmount * processingFeePercentage);
+//    const disbursalAmount = totalLoanAmount - (emi * preEMIPeriod);
+
+    console.log('EMI:', emi);
+    console.log('Total Loan Amount:', totalLoanAmount);
+    console.log('Disbursal Amount:', disbursalAmount);
 
     return {
         emi: emi.toFixed(2),
-     //   totalLoanAmount: totalLoanAmount.toFixed(2),
-       // disbursalAmount: disbursalAmount.toFixed(2)
+    //    totalLoanAmount: totalLoanAmount.toFixed(2),
+      //  disbursalAmount: disbursalAmount.toFixed(2)
     };
+}
+
+// Function to trigger haptic feedback
+function triggerHapticFeedback() {
+    // Check if the WebHaptic API is supported
+    if ('vibrate' in navigator) {
+        // Define a pattern for haptic feedback (e.g., vibrate for 100ms)
+        const hapticPattern = [100];
+        navigator.vibrate(hapticPattern);
+    }
 }
 
 // Event listener for slider changes (for processing fee and pre-EMI period)
@@ -86,46 +103,32 @@ document.addEventListener('input', function (e) {
     }
 });
 
-// Check if the WebHaptic API is supported by the browser
-if ('vibrate' in navigator) {
-    // Define a pattern for haptic feedback (e.g., vibrate for 100ms)
-    const hapticPattern = [100];
+// Event listener for Calculate EMI button
+document.getElementById('calculate-emi').addEventListener('click', function () {
+    const emiResult = calculateEMI();
+    const emiResultElement = document.getElementById('emi-result');
+    emiResultElement.innerHTML = `
+        <h3>EMI: ₹${emiResult.emi} per month</h3>
+     //   <p>Total Loan Amount: ₹${emiResult.totalLoanAmount}</p>
+   //     <p>Disbursal Amount: ₹${emiResult.disbursalAmount}</p>
+        <p><a href="#" id="download-amortization">Download Amortization Schedule</a></p>
+    `;
 
-    // Function to trigger haptic feedback
-    function triggerHapticFeedback() {
-        navigator.vibrate(hapticPattern);
-    }
+    // Trigger haptic feedback when the button is clicked
+    triggerHapticFeedback();
 
-    // Event listener for Calculate EMI button
-    document.getElementById('calculate-emi').addEventListener('click', function () {
-        const emiResult = calculateEMI();
-        const emiResultElement = document.getElementById('emi-result');
-        emiResultElement.innerHTML = `
-            <h3>EMI: ₹${emiResult.emi} per month</h3>
-            <p>Total Loan Amount: ₹${emiResult.totalLoanAmount}</p>
-            <p>Disbursal Amount: ₹${emiResult.disbursalAmount}</p>
-            <p><a href="#" id="download-amortization">Download Amortization Schedule</a></p>
-        `;
-
-        // Trigger haptic feedback when the button is clicked
-        triggerHapticFeedback();
-
-        // Event listener for Download Amortization Schedule link
-        document.getElementById('download-amortization').addEventListener('click', function () {
-            // Generate and download the amortization schedule (as shown in previous code)
-            alert('Amortization schedule download functionality to be implemented.');
-        });
+    // Event listener for Download Amortization Schedule link
+    document.getElementById('download-amortization').addEventListener('click', function () {
+        // Generate and download the amortization schedule (as shown in previous code)
+        console.log('Download Amortization Schedule clicked');
+        alert('Amortization schedule download functionality to be implemented.');
     });
-} else {
-    console.log('WebHaptic API is not supported in this browser.');
-}
-
+});
 
 // Initialize slider values when the page loads
 window.addEventListener('load', function () {
     initializeSliders();
 });
-
     </script>
 </body>
 </html>
