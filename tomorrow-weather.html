@@ -47,7 +47,7 @@ function getTomorrowWeather(city) {
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(0, 0, 0, 0);
-
+            console.log(data);
             const weatherList = data.list;
             for (const weather of weatherList) {
                 const dateTime = new Date(weather.dt * 1000);
