@@ -100,9 +100,9 @@
                     console.log('Weather List: ',weatherList);
                     for (const weather of weatherList) {
                         const dateTime = new Date(weather.dt * 1000);
-                        console.log('Weather dateTime: ',dateTime.getTime());
-                        console.log('Console DateTime: ',tomorrow.getTime());
-                        if (dateTime.getTime() === tomorrow.getTime()) {
+                        console.log('Weather dateTime: ',dateTime.getDate());
+                        console.log('Console DateTime: ',tomorrow.getDate());
+                        if (dateTime.getDate() === tomorrow.getDate())  {
                             const weatherDescription = weather.weather[0].description;
                             document.getElementById('weather').textContent = `Tomorrow's Weather: ${weatherDescription}`;
                             console.log('Tomorrow\'s Weather:', weatherDescription);
