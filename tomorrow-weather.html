@@ -47,15 +47,18 @@
     </style>
 </head>
 <body>
-    <h1>Tomorrow's Weather</h1>
+    <h1><p id="tomorrow-date">Loading...</p></h1>
+</b>
+    <h1>Tomorrow's Weather is: <p id="weather">Loading...</p> </b>
+    for City: <p id="city">Loading...</p></h1>
     
     <button id="detect-weather">Detect Weather</button>
 
-    <p id="city">City: Loading...</p>
-    <p id="weather">Tomorrow's Weather: Loading...</p>
+   <!-- <p id="city">City: Loading...</p> -->
+    
     <p id="sunrise">Sunrise 🌅: Loading...</p>
     <p id="sunset">Sunset 🌇: Loading...</p>
-    <p id="tomorrow-date">Tomorrow's Date 📅: Loading...</p>
+   <!-- <p id="tomorrow-date">Tomorrow's Date 📅: Loading...</p> -->
     <p id="temperature">Temperature 🌡️: Loading...</p>
 
     <script>
@@ -141,7 +144,7 @@
             console.log(tomorrowDate);
             console.log(data.list[0]);
             document.getElementById('tomorrow-date').textContent = `Tomorrow's Date 📅: ${tomorrowFormatted}`;
-            document.getElementById('temperature').textContent = `Temperature 🌡️: ${tomorrowTemperature}°C`;
+            document.getElementById('temperature').textContent = `Temperature 🌡️: ${tomorrowTemperatureCelsius}°C`;
         }
 
         // Event listener for the "Detect Weather" button
