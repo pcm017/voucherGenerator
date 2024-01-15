@@ -4,6 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tomorrow's Weather</title>
+    <style>
+        body {
+            background-color: #f0f0f0; /* Background color */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333; /* Header color */
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #007BFF; /* Button background color */
+            color: white; /* Button text color */
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #555; /* Text color */
+            margin: 5px 0;
+        }
+
+        #tomorrow-date {
+            font-weight: bold;
+        }
+
+        #temperature {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <h1>Tomorrow's Weather</h1>
@@ -62,6 +103,8 @@
                             const weatherDescription = weather.weather[0].description;
                             document.getElementById('weather').textContent = `Tomorrow's Weather: ${weatherDescription}`;
                             console.log('Tomorrow\'s Weather:', weatherDescription);
+                            displayTomorrowDateTemperature(data);
+
                             break;
                         }
                     }
@@ -88,8 +131,10 @@
             const tomorrowDate = new Date();
             tomorrowDate.setDate(tomorrowDate.getDate() + 1);
             const tomorrowFormatted = tomorrowDate.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
+// Convert temperature from Kelvin to Celsius
+    const tomorrowTemperatureKelvin = data.list[0].main.temp;
+    const tomorrowTemperatureCelsius = (tomorrowTemperatureKelvin - 273.15).toFixed(2);
 
-            const tomorrowTemperature = data.list[0].main.temp;
             document.getElementById('tomorrow-date').textContent = `Tomorrow's Date 📅: ${tomorrowFormatted}`;
             document.getElementById('temperature').textContent = `Temperature 🌡️: ${tomorrowTemperature}°C`;
         }
