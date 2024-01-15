@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tomorrow's Weather</title>
+</head>
+<body>
+    <h1>Tomorrow's Weather</h1>
+    <p>City: <span id="city"></span></p>
+    <p>Weather for Tomorrow: <span id="weather"></span></p>
+    <button id="detect-weather">Detect Weather</button>
+
+    <!-- Include JavaScript code here -->
+  <script>
+// Replace 'YOUR_API_KEY' with your actual OpenWeatherMap API key
+const apiKey = 'YOUR_API_KEY';
+
+// Function to get the user's city using the Geolocation API
+function getCity() {
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    const city = data.name;
+                    document.getElementById('city').textContent = city;
+                    getTomorrowWeather(city);
+                })
+                .catch((error) => {
+                    console.error('Error fetching city:', error);
+                });
+        });
+    } else {
+        console.error('Geolocation is not available.');
+    }
+}
+
+// Function to get tomorrow's weather for the given city
+function getTomorrowWeather(city) {
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`)
+        .then((response) => response.json())
+        .then((data) => {
+            // Find the weather data for tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+
+            const weatherList = data.list;
+            for (const weather of weatherList) {
+                const dateTime = new Date(weather.dt * 1000);
+                if (dateTime.getTime() === tomorrow.getTime()) {
+                    const weatherDescription = weather.weather[0].description;
+                    document.getElementById('weather').textContent = weatherDescription;
+                    break;
+                }
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching weather:', error);
+        });
+}
+
+// Event listener for the "Detect Weather" button
+document.getElementById('detect-weather').addEventListener('click', getCity);
+
+// Automatically detect weather when the page loads
+window.addEventListener('load', getCity);
+
+    
+  </script>
+</body>
+</html>
